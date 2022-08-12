@@ -2142,14 +2142,13 @@ sub main {
          Quoter     => $q,
       );
 
-      my $ret = "[";
+      my $ret = "";
       foreach my $array_ref ( @tables ) {
-         $ret = $ret . @$array_ref[1] . ", ";
+         $ret = $ret . @$array_ref[1] . ",";
       }
-      if (length $ret > 1) {
-         $ret = substr($ret, 0, (length $ret) - 2);
+      if (length $ret > 0) {
+         $ret = substr($ret, 0, (length $ret) - 1);
       } 
-      $ret = $ret . "]";
 
       print $ret, "\n";
    }
@@ -2166,14 +2165,13 @@ sub main {
             default_db => "",
             Quoter     => $q,
          );
-         my $ret = "[";
+         my $ret = "";
          foreach my $array_ref ( @tables ) {
-            $ret = $ret . @$array_ref[1];
+            $ret = $ret . @$array_ref[1] . ",";
          }
-         if (length $ret > 1) {
-            $ret = substr($ret, 0, (length $ret) - 2);
+         if (length $ret > 0) {
+            $ret = substr($ret, 0, (length $ret) - 1);
          } 
-         $ret = $ret . "]";
 
          print $ret, "\n";
       }
