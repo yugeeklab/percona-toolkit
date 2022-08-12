@@ -2146,7 +2146,9 @@ sub main {
       foreach my $array_ref ( @tables ) {
          $ret = $ret . @$array_ref[1] . ", ";
       }
-      $ret = substr($ret, 0, (length $ret) - 2);
+      if (length $ret > 1) {
+         $ret = substr($ret, 0, (length $ret) - 2);
+      } 
       $ret = $ret . "]";
 
       print $ret, "\n";
@@ -2168,7 +2170,9 @@ sub main {
          foreach my $array_ref ( @tables ) {
             $ret = $ret . @$array_ref[1];
          }
-         $ret = substr($ret, 0, (length $ret) - 2);
+         if (length $ret > 1) {
+            $ret = substr($ret, 0, (length $ret) - 2);
+         } 
          $ret = $ret . "]";
 
          print $ret, "\n";
