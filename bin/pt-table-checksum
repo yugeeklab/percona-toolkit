@@ -50,15 +50,15 @@ BEGIN {
 # ###########################################################################
 # Percona::Toolkit package
 # This package is a copy without comments from the original.  The original
-# with comments and its test file can be found in the Bazaar repository at,
+# with comments and its test file can be found in the GitHub repository at,
 #   lib/Percona/Toolkit.pm
 #   t/lib/Percona/Toolkit.t
-# See https://launchpad.net/percona-toolkit for more information.
+# See https://github.com/percona/percona-toolkit for more information.
 # ###########################################################################
 {
 package Percona::Toolkit;
 
-our $VERSION = '3.3.2';
+our $VERSION = '3.5.0';
 
 use strict;
 use warnings FATAL => 'all';
@@ -7566,10 +7566,10 @@ sub _d {
 # ###########################################################################
 # SchemaIterator package
 # This package is a copy without comments from the original.  The original
-# with comments and its test file can be found in the Bazaar repository at,
+# with comments and its test file can be found in the GitHub repository at,
 #   lib/SchemaIterator.pm
 #   t/lib/SchemaIterator.t
-# See https://launchpad.net/percona-toolkit for more information.
+# See https://github.com/percona/percona-toolkit for more information.
 # ###########################################################################
 {
 package SchemaIterator;
@@ -7974,7 +7974,7 @@ sub engine_is_allowed {
    my $filter = $self->{filters};
 
    if ( $filter->{'ignore-engines'}->{$engine} ) {
-      PTDEBUG && _d('Engine', $engine, 'is in --ignore-databases list');
+      PTDEBUG && _d('Engine', $engine, 'is in --ignore-engines list');
       return 0;
    }
 
@@ -10591,20 +10591,24 @@ sub main {
          }
       }
 
-      for my $slave (@$slaves) {
-          my $qrt_plugin_status;
-          eval {
-              ($qrt_plugin_status) = $slave->{dbh}->selectrow_arrayref('SELECT @@QUERY_RESPONSE_TIME_SESSION_STATS' );
-          };
-          if ($EVAL_ERROR) {
-              PTDEBUG && _d('QRT plugin is not installed on slave '.$slave->{dsn_name});
-              $slave->{qrt_plugin_status} = undef;
-              next;
-          }
-          $slave->{qrt_plugin_status} = $qrt_plugin_status->[0];
-          if ($slave->{qrt_plugin_status}) {
-              PTDEBUG && _d("Disabling qrt plugin state on slave ".$slave->{dsn_name});
-              $slave->{dbh}->do('SET GLOBAL query_response_time_stats = off');
+      # don't touch the QRT plugin on the slave unless we asked for it
+      # to be disabled.
+      if ($o->get('disable-qrt-plugin')) {
+          for my $slave (@$slaves) {
+              my $qrt_plugin_status;
+              eval {
+                  ($qrt_plugin_status) = $slave->{dbh}->selectrow_arrayref('SELECT @@QUERY_RESPONSE_TIME_SESSION_STATS' );
+              };
+              if ($EVAL_ERROR) {
+                  PTDEBUG && _d('QRT plugin is not installed on slave '.$slave->{dsn_name});
+                  $slave->{qrt_plugin_status} = undef;
+                  next;
+              }
+              $slave->{qrt_plugin_status} = $qrt_plugin_status->[0];
+              if ($slave->{qrt_plugin_status}) {
+                  PTDEBUG && _d("Disabling qrt plugin state on slave ".$slave->{dsn_name});
+                  $slave->{dbh}->do('SET GLOBAL query_response_time_stats = off');
+              }
           }
       }
 
@@ -11488,7 +11492,7 @@ sub main {
    TABLE:
    while ( $oktorun && $have_time->() && (my $tbl = $schema_iter->next()) ) {
       eval {
-         # Results, stats, and info related to checksuming this table can
+         # Results, stats, and info related to checksumming this table can
          # be saved here.  print_checksum_results() uses this info.
          $tbl->{checksum_results} = {};
 
@@ -13101,7 +13105,7 @@ type: string
 Channel name used when connected to a server using replication channels.
 Suppose you have two masters, master_a at port 12345, master_b at port 1236 and
 a slave connected to both masters using channels chan_master_a and chan_master_b.
-If you want to run pt-table-sync to syncronize the slave against master_a, pt-table-sync
+If you want to run pt-table-sync to synchronize the slave against master_a, pt-table-sync
 won't be able to determine what's the correct master since SHOW SLAVE STATUS
 will return 2 rows. In this case, you can use --channel=chan_master_a to specify
 the channel name to use in the SHOW SLAVE STATUS command.
@@ -13119,7 +13123,7 @@ See "Replicas using row-based replication" under L<"LIMITATIONS">.
 This option modifies the behavior of L<"--create-replicate-table"> such that the
 replicate table's upper and lower boundary columns are created with the BLOB
 data type.
-This is useful in cases where you have trouble checksuming tables with keys that
+This is useful in cases where you have trouble checksumming tables with keys that 
 include a binary data type or that have non-standard character sets.
 See L<"--replicate">.
 
@@ -13347,7 +13351,9 @@ Only checksum this comma-separated list of databases.
 
 type: string; group: Filter
 
-Only checksum databases whose names match this Perl regex.
+Only checksum databases whose names match this Perl regex. This is matched
+against the lowercase table name. This is the bare regex; it should not be
+enclosed in slashes.
 
 =item --defaults-file
 
@@ -13478,7 +13484,9 @@ the database name.  The L<"--replicate"> table is always automatically ignored.
 
 type: string; group: Filter
 
-Ignore tables whose names match the Perl regex.
+Ignore tables whose names match the Perl regex. This is matched
+against the lowercase table name. This is the bare regex; it should not be
+enclosed in slashes.
 
 =item --max-lag
 
@@ -14188,6 +14196,6 @@ Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-pt-table-checksum 3.4.0
+pt-table-checksum 3.5.0
 
 =cut

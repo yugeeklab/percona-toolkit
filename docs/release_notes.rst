@@ -1,6 +1,84 @@
 Percona Toolkit
 ***************
 
+v3.5.0 released 2022-11-28
+==============================
+
+New Features
+------------
+
+* :jirabug:`PT-191`: add SSL options to DSN field for pt-online-schema-change
+
+
+
+Improvements
+------------------------------------------------------------
+
+* :jirabug:`PT-1718`: Have pt-stalk collect performance_schema.threads along with information_schema.processlist
+* :jirabug:`PT-2033`: Avoid running same query concurrently from pt-stalk
+* :jirabug:`PT-2013`: Change Percona Toolkit tool names to eliminate offensive terminology 
+
+
+
+Bugs Fixed
+------------
+
+* :jirabug:`PT-1926`: pt-k8s-debug-collector should not collect passwords
+* :jirabug:`PT-1628`: pt-mysql-summary checks installed mysqld binary which may not be the version in memory
+* :jirabug:`PT-1739`: disable-qrt-plugin option of pt-table-checksum is broken (Thanks to Ernie Souhrada for reporting this issue)
+* :jirabug:`PT-175`: Add support for replication channels on pt-slave-restart
+* :jirabug:`PT-1052`: Include NUMA information in in pt-summary and pt-stalk output
+
+* :jirabug:`PT-1799`: pt-osc + PTDEBUG=1 fails with Use of uninitialized value in concatenation (.) or string at /usr/bin/pt-online-schema-change line 4270.
+* :jirabug:`PT-1897`: pt-stalk on MySQL 8 not collecting "lock" information
+* :jirabug:`PT-2092`: Improper version of protobuf in go.sum
+* :jirabug:`PT-2079`: Incorrect version is returned
+* :jirabug:`PT-2075`: Fix tests for pt-stalk, so they can work with 8.0
+* :jirabug:`PT-1959`: go part of the toolkit still has the version 3.3.0
+  
+Packaging Notes 
+------------------------
+
+``percona-toolkit`` is now available on Ubuntu 22.04 and Red Hat Enterprise Linux 9
+
+v3.4.0 released 2022-07-11
+==========================
+
+New Features
+------------
+
+* :jirabug:`PT-1978`: Add reporting on unused/redundant indexes for MongoDB by pt-mongodb-summary
+
+Improvements
+------------
+
+* :jirabug:`PT-1417`: Inconsistent creation of toolkit tables
+* :jirabug:`PT-1800`: The environment variable PTDEBUG=1 exposes the passwords
+* :jirabug:`PT-1940`: ptsoc dropswap method that was rejected for Mysql 8 has been fixed with Mysql 8.0.14
+* :jirabug:`PT-1979`: Add gathering of admin parameters for MongoDB by pt-mongodb-summary
+* :jirabug:`PT-2037`: Add option --skip-mysql or --system-only for pt-stalk
+
+Bugs Fixed
+----------
+
+* :jirabug:`PT-1218`: pt-stalk ominous open_tables function
+* :jirabug:`PT-1336`: pt-stalk removes user's files from the destination directory
+* :jirabug:`PT-1398`: pt-stalk gets the incorrect mysqld pid when the host installed a multi MySQL instance
+* :jirabug:`PT-1627`: pt-mysql-summary doesn't verify which version of jemalloc is in use
+* :jirabug:`PT-1747`: pt-online-schema-change: metadata lock can break database for rebuild_constraints
+* :jirabug:`PT-1887`: pt-diskstat is not working for new kernels
+* :jirabug:`PT-1900`: At times, pt-query-digest does not hide the parameters properly when parameter=binary
+* :jirabug:`PT-1953`: pt-summary typo: Memory management.
+* :jirabug:`PT-1959`: go part of the toolkit still has the version 3.3.0
+* :jirabug:`PT-1965`: pt-stalk --mysql-only doesn't collect mysqladmin output
+* :jirabug:`PT-1966`: Test no_drop_no_swap for the pt-online-schema-change is broken
+* :jirabug:`PT-1974`: Support fingerprinting for --print in pt-kill
+* :jirabug:`PT-1983`: pt-summary missing one DIMM	
+* :jirabug:`PT-2016`: pt-table-checksum fails to build replace query when table lacks primary key
+* :jirabug:`PT-2023`: pt-upgrade Error: Wide character in print
+
+
+
 v3.3.1 released 2021-04-28
 ==========================
 

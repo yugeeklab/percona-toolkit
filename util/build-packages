@@ -399,7 +399,7 @@ build_deb() {
 
    cd $RELEASE_DIR
    if [ ! -f "$PKG.tar.gz" ]; then
-      die "Cannot build RPM because $PKG.tar.gz does not exist"
+      die "Cannot build deb because $PKG.tar.gz does not exist"
    fi
 
    # Copy debian pkg files.
@@ -481,6 +481,13 @@ fi
 VERSION=$1
 REL_NOTES=$2
 OS_ARCH=${3:-linux-amd64}
+
+ONLY_UPDATE_VERSION=${ONLY_UPDATE_VERSION:-0}
+
+if [ $ONLY_UPDATE_VERSION -eq 1 ]; then
+   update_version
+   exit
+fi
 
 if [ $OS_ARCH != "linux-amd64" ] && [ $OS_ARCH != "linux-386" ] && [ $OS_ARCH != "darwin-amd64" ]; then
    die "Valid OS-ARCH combinations are: linux-amd64, linux-386, darwin-amd64"

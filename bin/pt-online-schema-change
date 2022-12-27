@@ -48,15 +48,15 @@ BEGIN {
 # ###########################################################################
 # Percona::Toolkit package
 # This package is a copy without comments from the original.  The original
-# with comments and its test file can be found in the Bazaar repository at,
+# with comments and its test file can be found in the GitHub repository at,
 #   lib/Percona/Toolkit.pm
 #   t/lib/Percona/Toolkit.t
-# See https://launchpad.net/percona-toolkit for more information.
+# See https://github.com/percona/percona-toolkit for more information.
 # ###########################################################################
 {
 package Percona::Toolkit;
 
-our $VERSION = '3.3.2';
+our $VERSION = '3.5.0';
 
 use strict;
 use warnings FATAL => 'all';
@@ -4294,7 +4294,7 @@ sub recurse_to_slaves {
    my $slave_dsn = $dsn;
    if ($slave_user) {
       $slave_dsn->{u} = $slave_user;
-      PTDEBUG && _d("Using slave user $slave_user on ".$slave_dsn->{h}.":".$slave_dsn->{P});
+      PTDEBUG && _d("Using slave user $slave_user on ".$slave_dsn->{h}.":".($slave_dsn->{P}?$slave_dsn->{P}:""));
    }
    if ($slave_password) {
       $slave_dsn->{p} = $slave_password;
@@ -12073,7 +12073,7 @@ C<wsrep_OSU_method> is not C<TOI>.  There is no way to disable these checks.
 =head1 MySQL 5.7 + Generated columns
 
 The tools ignores MySQL 5.7+ C<GENERATED> columns since the value for those columns
-is generated according to the expresion used to compute column values.
+is generated according to the expression used to compute column values.
 
 =head1 OUTPUT
 
@@ -13469,6 +13469,6 @@ Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-pt-online-schema-change 3.4.0
+pt-online-schema-change 3.5.0
 
 =cut
